@@ -33,12 +33,20 @@ public class ScoreFragment extends Fragment {
 	public ScoreFragment() {
 		// Required empty public constructor
 	}
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		this.homeGoalScorerList = new ArrayList<>();
+		this.awayGoalScorerList = new ArrayList<>();
+	}
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		FragmentScoreBinding binding = DataBindingUtil
 				.inflate(inflater, R.layout.fragment_score, container, false);
+		binding.setFragment(this);
 		binding.setHomeGoalScorerList(homeGoalScorerList);
 		binding.setAwayGoalScorerList(awayGoalScorerList);
 		getParentFragmentManager().setFragmentResultListener(HOME_REQUEST_KEY, this, new FragmentResultListener() {
@@ -58,15 +66,41 @@ public class ScoreFragment extends Fragment {
 		});
 		return binding.getRoot();
 	}
-
 	public void onAddHomeClick(View view) {
 		ScoreFragmentDirections.GoalScorerAction action = ScoreFragmentDirections.goalScorerAction(HOME_REQUEST_KEY);
 		Navigation.findNavController(view).navigate(action);
-	}
 
+	}
 	public void onAddAwayClick(View view) {
 		ScoreFragmentDirections.GoalScorerAction action = ScoreFragmentDirections.goalScorerAction(AWAY_REQUEST_KEY);
 		Navigation.findNavController(view).navigate(action);
+
+	}
+	public String getHomeScorer() {
+		StringBuilder result = new StringBuilder();
+		for (GoalScorer g : homeGoalScorerList) {
+			result.append(g.getName())
+					.append(" ")
+					.append(g.getMinute())
+					.append("\" ");
+		}
+		return result.toString();
+	}
+
+	public String getAwayScorer() {
+		StringBuilder result = new StringBuilder();
+		for (GoalScorer g : awayGoalScorerList) {
+			result.append(g.getName())
+					.append(" ")
+					.append(g.getMinute())
+					.append("\" ");
+		}
+		return result.toString();
 	}
 
 }
+
+
+
+
+
